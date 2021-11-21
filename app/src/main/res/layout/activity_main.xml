@@ -18,21 +18,13 @@
         android:textColor="@color/black"
         android:textSize="16sp" />
 
-    <LinearLayout
+    <EditText
+        android:id="@+id/net_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/net_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="0.0.0.0"
-            android:inputType="phone" />
-
-    </LinearLayout>
+        android:ems="10"
+        android:hint="0.0.0.0"
+        android:inputType="phone" />
 
     <TextView
         android:layout_width="match_parent"
@@ -78,11 +70,13 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
                 android:padding="5dp"
-                android:text="Address: " />
+                android:text="Address: "
+                android:textColor="@color/black" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:fontFamily="sans-serif-black"
                 android:padding="5dp" />
@@ -97,11 +91,13 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
                 android:padding="5dp"
-                android:text="Netmask: " />
+                android:text="Netmask: "
+                android:textColor="@color/black" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/mask"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:fontFamily="sans-serif-black"
                 android:padding="5dp" />
@@ -116,11 +112,13 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
                 android:padding="5dp"
-                android:text="IP Class: " />
+                android:text="IP Class: "
+                android:textColor="@color/black" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/ip_class"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:fontFamily="sans-serif-black"
                 android:padding="5dp" />
@@ -135,11 +133,33 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
                 android:padding="5dp"
-                android:text="Network: " />
+                android:text="Validity: "
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/validity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:padding="5dp"
+                android:text="Network: "
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/net_id"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:fontFamily="sans-serif-black"
                 android:padding="5dp" />
@@ -154,11 +174,13 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
                 android:padding="5dp"
-                android:text="Broadcast: " />
+                android:text="Broadcast: "
+                android:textColor="@color/black" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/broadcast_id"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:fontFamily="sans-serif-black"
                 android:padding="5dp" />
@@ -173,11 +195,13 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
                 android:padding="5dp"
-                android:text="Host Min: " />
+                android:text="Host Min: "
+                android:textColor="@color/black" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/host_min"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:fontFamily="sans-serif-black"
                 android:padding="5dp" />
@@ -192,11 +216,13 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
                 android:padding="5dp"
-                android:text="Host Max: " />
+                android:text="Host Max: "
+                android:textColor="@color/black" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/host_max"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:fontFamily="sans-serif-black"
                 android:padding="5dp" />
@@ -211,11 +237,13 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-black"
                 android:padding="5dp"
-                android:text="Host count: " />
+                android:text="Host count: "
+                android:textColor="@color/black" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/host_count"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:fontFamily="sans-serif-black"
                 android:padding="5dp" />
