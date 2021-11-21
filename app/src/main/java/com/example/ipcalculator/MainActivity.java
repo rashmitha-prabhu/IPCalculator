@@ -32,24 +32,74 @@ public class MainActivity extends AppCompatActivity {
         out = out + Integer.parseInt(parts[3], 2);
         return out;
     }
-
-    int isValid(String ip_address){
-        //TODO: Check restricted ip addresses and compare with input. If restricted, return 1 else 0
-        return 1;
-    }
-
+    
     void setFields(String ip_address, String sub_mask){
         long ip = Long.parseLong(ip_address, 2);
         long subnet = Long.parseLong(sub_mask, 2);
         long sub_invert = (0xffffffffL)^subnet;
 
-        String net = String.format("%32s", Long.toBinaryString(ip & subnet)).replaceAll(" ", "0");
-        String broadcast = String.format("%32s", Long.toBinaryString(ip | sub_invert)).replaceAll(" ", "0");
+        long net_id = ip & subnet;
+        long b_id = ip | sub_invert;
+        long h_min = net_id + 1;
+        long h_max = b_id - 1;
+        String flag = "";
+        String valid = "Valid";
+
+        int class_def = Integer.parseInt(ip_address.substring(0, 8), 2);
+        int next_byte;
+
+        if(class_def >= 0 && class_def <= 127){
+            if(class_def == 0){
+                valid = "Invalid (Default route address)";
+            } else if(class_def == 10){
+                valid = "Invalid (Private IP)";
+            } else if(class_def == 127){
+                valid = "Invalid (Loopback address)";
+            }
+            flag = "A";
+        } else if(class_def >= 128 && class_def <= 191){
+            if(class_def == 172){
+                next_byte = Integer.parseInt(ip_address.substring(8, 16), 2);
+                if (next_byte >= 16 && next_byte <= 31)
+                    valid = "Invalid (Private IP)";
+            }
+            flag = "B";
+        } else if(class_def >= 192 && class_def <= 223){
+            if(class_def == 192){
+                next_byte = Integer.parseInt(ip_address.substring(8, 16), 2);
+                if (next_byte == 168)
+                    valid = "Invalid (Private IP)";
+            }
+            flag = "C";
+        } else if(class_def >= 224 && class_def <= 239){
+            valid = "Invalid (Multicast address)";
+            flag = "D";
+        } else if(class_def >= 240 && class_def <= 255){
+            valid = "Invalid (Reserved/Research/Experimental)";
+            flag = "E";
+        }
+
+        String net = String.format("%32s", Long.toBinaryString(net_id)).replaceAll(" ", "0");
+        String broadcast = String.format("%32s", Long.toBinaryString(b_id)).replaceAll(" ", "0");
+        String min = String.format("%32s", Long.toBinaryString(h_min)).replaceAll(" ", "0");
+        String max = String.format("%32s", Long.toBinaryString(h_max)).replaceAll(" ", "0");
 
         address.setText(formatInput(ip_address));
         mask.setText(formatInput(sub_mask));
         network_id.setText(formatInput(net));
         broadcast_id.setText(formatInput(broadcast));
+        if(h_max <= net_id){
+            host_max.setText("N/A");
+        }else{
+            host_max.setText(formatInput(max));
+        }
+        if(h_min >= b_id){
+            host_min.setText("N/A");
+        }else{
+            host_min.setText(formatInput(min));
+        }
+        ip_class.setText(flag);
+        validity.setText(valid);
     }
 
     @Override
@@ -83,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
                 net_address.setError("Enter valid input");
             }
 
-            if(subnet.isEmpty() || Integer.parseInt(subnet)>32 || Integer.parseInt(subnet)<0) {
+            if(subnet.isEmpty() || Integer.parseInt(subnet)>32 || Integer.parseInt(subnet)<=0) {
                 net_mask.setError("Enter valid input");
                 flag2 = 0;
             }else{
@@ -101,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 sub_mask = String.format("%32s", Integer.toBinaryString(0xffffffff << (32-Integer.parseInt(subnet))));
 
+                host_count.setText(String.valueOf(Math.round(Math.pow(2, (32 - Integer.parseInt(subnet))))));
                 setFields(ip_address, sub_mask);
             }
         });
