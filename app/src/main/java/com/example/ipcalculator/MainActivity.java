@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     Button calculate;
     EditText net_address, net_mask;
     TextView address, mask, ip_class, validity, network_id, broadcast_id, host_min, host_max, host_count;
+    TextView block1, block2, block3;
     String net_id, subnet, bin;
     String[] parts;
     int flag1 = 0, flag2 = 0, num;
@@ -32,16 +32,8 @@ public class MainActivity extends AppCompatActivity {
         out = out + Integer.parseInt(parts[3], 2);
         return out;
     }
-    
-    void setFields(String ip_address, String sub_mask){
-        long ip = Long.parseLong(ip_address, 2);
-        long subnet = Long.parseLong(sub_mask, 2);
-        long sub_invert = (0xffffffffL)^subnet;
 
-        long net_id = ip & subnet;
-        long b_id = ip | sub_invert;
-        long h_min = net_id + 1;
-        long h_max = b_id - 1;
+    void validity(String ip_address){
         String flag = "";
         String valid = "Valid";
 
@@ -79,6 +71,44 @@ public class MainActivity extends AppCompatActivity {
             flag = "E";
         }
 
+        ip_class.setText(flag);
+        validity.setText(valid);
+    }
+
+    void blocks(long net_id, long b_id){
+        long size = b_id - net_id;
+        long b_1start = b_id + 1;
+        long b_1end = b_1start + size;
+
+        String b1 = formatInput(String.format("%32s", Long.toBinaryString(b_1start)).replaceAll(" ", "0"))
+                + " -\n" + formatInput(String.format("%32s", Long.toBinaryString(b_1end)).replaceAll(" ", "0"));
+        block1.setText(b1);
+
+        long b_2start = b_1end + 1;
+        long b_2end = b_2start + size;
+
+        String b2 = formatInput(String.format("%32s", Long.toBinaryString(b_2start)).replaceAll(" ", "0"))
+                + " -\n" + formatInput(String.format("%32s", Long.toBinaryString(b_2end)).replaceAll(" ", "0"));
+        block2.setText(b2);
+
+        long b_3start = b_2end + 1;
+        long b_3end = b_3start + size;
+
+        String b3 = formatInput(String.format("%32s", Long.toBinaryString(b_3start)).replaceAll(" ", "0"))
+                + " -\n" + formatInput(String.format("%32s", Long.toBinaryString(b_3end)).replaceAll(" ", "0"));
+        block3.setText(b3);
+    }
+
+    void setFields(String ip_address, String sub_mask){
+        long ip = Long.parseLong(ip_address, 2);
+        long subnet = Long.parseLong(sub_mask, 2);
+        long sub_invert = (0xffffffffL)^subnet;
+
+        long net_id = ip & subnet;
+        long b_id = ip | sub_invert;
+        long h_min = net_id + 1;
+        long h_max = b_id - 1;
+
         String net = String.format("%32s", Long.toBinaryString(net_id)).replaceAll(" ", "0");
         String broadcast = String.format("%32s", Long.toBinaryString(b_id)).replaceAll(" ", "0");
         String min = String.format("%32s", Long.toBinaryString(h_min)).replaceAll(" ", "0");
@@ -88,18 +118,20 @@ public class MainActivity extends AppCompatActivity {
         mask.setText(formatInput(sub_mask));
         network_id.setText(formatInput(net));
         broadcast_id.setText(formatInput(broadcast));
+
         if(h_max <= net_id){
             host_max.setText("N/A");
-        }else{
+        } else{
             host_max.setText(formatInput(max));
         }
         if(h_min >= b_id){
             host_min.setText("N/A");
-        }else{
+        } else{
             host_min.setText(formatInput(min));
         }
-        ip_class.setText(flag);
-        validity.setText(valid);
+
+        validity(ip_address);
+        blocks(net_id, b_id);
     }
 
     @Override
@@ -119,6 +151,9 @@ public class MainActivity extends AppCompatActivity {
         host_min = findViewById(R.id.host_min);
         host_max = findViewById(R.id.host_max);
         host_count = findViewById(R.id.host_count);
+        block1 = findViewById(R.id.block1);
+        block2 = findViewById(R.id.block2);
+        block3 = findViewById(R.id.block3);
 
         calculate.setOnClickListener(view -> {
             net_id = net_address.getText().toString();
