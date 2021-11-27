@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             valid = "Invalid (Multicast address)";
             flag = "D";
         } else if(class_def >= 240 && class_def <= 255){
-            valid = "Invalid (Reserved/Research/Experimental)";
+            valid = "Invalid (Reserved IP)";
             flag = "E";
         }
 
