@@ -186,7 +186,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 sub_mask = String.format("%32s", Integer.toBinaryString(0xffffffff << (32-Integer.parseInt(subnet))));
 
-                host_count.setText(String.valueOf(Math.round(Math.pow(2, (32 - Integer.parseInt(subnet))))));
+                int hosts = (int) Math.round(Math.pow(2, (32 - Integer.parseInt(subnet)))) - 2;
+                if(hosts<0)
+                    hosts = 0;
+                host_count.setText(String.valueOf(hosts));
                 setFields(ip_address, sub_mask);
             }
         });
